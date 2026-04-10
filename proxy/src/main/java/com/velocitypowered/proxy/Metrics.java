@@ -71,7 +71,7 @@ public class Metrics {
 
     if (!config.didExistBefore()) {
       // Send an info message when the bStats config file gets created for the first time
-      logger.info("Velocity and some of its plugins collect metrics"
+      logger.info("bVelocity and some of its plugins collect metrics"
           + " and send them to bStats (https://bStats.org).");
       logger.info("bStats collects some basic information for plugin"
           + " authors, like how many people use");
@@ -104,7 +104,7 @@ public class Metrics {
     private static final Logger logger = LogManager.getLogger(Metrics.class);
 
     static void startMetrics(VelocityServer server, VelocityConfiguration.Metrics metricsConfig) {
-      Metrics metrics = new Metrics(logger, 4752, metricsConfig.isEnabled());
+      Metrics metrics = new Metrics(logger, 30692, metricsConfig.isEnabled());
 
       metrics.addCustomChart(
           new SingleLineChart("players", server::getPlayerCount)
