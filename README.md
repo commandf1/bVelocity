@@ -3,7 +3,6 @@
 bVelocity is a customized Velocity fork focused on three things:
 
 - more aggressive bandwidth compression defaults
-- a built-in `/bvelocity` command surface
 - localized operational output for the added features
 
 This fork is licensed under the GPLv3 license.
@@ -14,9 +13,7 @@ This fork is licensed under the GPLv3 license.
 - `compression-level = -1` now means:
   - native `libdeflate`: level `12`
   - Java fallback: level `9`
-- built-in `/bvelocity` and `/bv` commands
 - outbound compression statistics and synthetic benchmark tooling
-- localized `bvelocity.command.*` message keys across all bundled locale files
   
 ## Building
 
