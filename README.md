@@ -1,6 +1,6 @@
 # bVelocity
 
-bVelocity is a customized Velocity fork focused on three things:
+bVelocity is a customized Velocity fork focused on 2 things:
 
 - more aggressive bandwidth compression defaults
 - localized operational output for the added features
