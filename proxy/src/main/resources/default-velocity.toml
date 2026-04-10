@@ -6,9 +6,9 @@ bind = "0.0.0.0:25565"
 
 # What should be the MOTD? This gets displayed when the player adds your server to
 # their server list. Only MiniMessage format is accepted.
-motd = "<#09add3>A Velocity Server"
+motd = "<#09add3>A bVelocity Server"
 
-# What should we display for the maximum number of players? (Velocity does not support a cap
+# What should we display for the maximum number of players? (bVelocity does not support a cap
 # on the number of players online.)
 show-max-players = 500
 
@@ -33,7 +33,7 @@ prevent-client-proxy-connections = false
 #                  plugin. Use this if you run servers using Minecraft 1.12 or lower, and are
 #                  unable to implement network level firewalling (on a shared host).
 # - "modern":      Forward player IPs and UUIDs as part of the login process using
-#                  Velocity's native forwarding. Only applicable for Minecraft 1.13 or higher.
+#                  bVelocity's native forwarding. Only applicable for Minecraft 1.13 or higher.
 player-info-forwarding-mode = "NONE"
 
 # If you are using modern or BungeeGuard IP forwarding, configure a file that contains a unique secret here.
@@ -47,22 +47,22 @@ forwarding-secret-file = "forwarding.secret"
 # instead for a nicer display in the server list.
 announce-forge = false
 
-# If enabled (default is false) and the proxy is in online mode, Velocity will kick
+# If enabled (default is false) and the proxy is in online mode, bVelocity will kick
 # any existing player who is online if a duplicate connection attempt is made.
 kick-existing-players = false
 
-# Should Velocity pass server list ping requests to a backend server?
+# Should bVelocity pass server list ping requests to a backend server?
 # Available options:
 # - "disabled":    No pass-through will be done. The velocity.toml and server-icon.png
 #                  will determine the initial server list ping response.
 # - "mods":        Passes only the mod list from your backend server into the response.
 #                  The first server in your try list (or forced host) with a mod list will be
-#                  used. If no backend servers can be contacted, Velocity won't display any
+#                  used. If no backend servers can be contacted, bVelocity won't display any
 #                  mod information.
 # - "description": Uses the description and mod list from the backend server. The first
 #                  server in the try (or forced host) list that responds is used for the
 #                  description and mod list.
-# - "all":         Uses the backend server's response as the proxy response. The Velocity
+# - "all":         Uses the backend server's response as the proxy response. The bVelocity
 #                  configuration is used if no servers could be contacted.
 ping-passthrough = "DISABLED"
 
@@ -106,10 +106,14 @@ try = [
 [advanced]
 # How large a Minecraft packet has to be before we compress it. Setting this to zero will
 # compress all packets, and setting it to -1 will disable compression entirely.
-compression-threshold = 256
+compression-threshold = 128
 
-# How much compression should be done (from 0-9). The default is -1, which uses the
-# default level of 6.
+# How much compression should be done. bVelocity accepts 0-12 here:
+# - Java fallback supports up to 9.
+# - Native libdeflate supports up to 12.
+# The default is -1, which uses an aggressive proxy-preferred level:
+# - 12 for native libdeflate
+# - 9 for the Java fallback
 compression-level = -1
 
 # How fast (in milliseconds) are clients allowed to connect after the last connection? By
@@ -129,13 +133,13 @@ haproxy-protocol = false
 # Enables TCP fast open support on the proxy. Requires the proxy to run on Linux.
 tcp-fast-open = false
 
-# Enables BungeeCord plugin messaging channel support on Velocity.
+# Enables BungeeCord plugin messaging channel support on bVelocity.
 bungee-plugin-message-channel = true
 
 # Shows ping requests to the proxy from clients.
 show-ping-requests = false
 
-# By default, Velocity will attempt to gracefully handle situations where the user unexpectedly
+# By default, bVelocity will attempt to gracefully handle situations where the user unexpectedly
 # loses connection to the server without an explicit disconnect message by attempting to fall the
 # user back, except in the case of read timeouts. BungeeCord will disconnect the user instead. You
 # can disable this setting to use the BungeeCord behavior.
@@ -190,7 +194,7 @@ enabled = false
 port = 25565
 
 # This is the map name that is reported to the query services.
-map = "Velocity"
+map = "bVelocity"
 
 # Whether plugins should be shown in query response by default or not
 show-plugins = false

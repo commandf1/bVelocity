@@ -17,7 +17,7 @@
 
 package com.velocitypowered.natives.compression;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.condition.OS.LINUX;
@@ -49,7 +49,10 @@ class VelocityCompressorTest {
   @Test
   @EnabledOnOs({LINUX})
   void sanityCheckNative() {
-    assertThrows(IllegalArgumentException.class, () -> Natives.compress.get().create(-42));
+    assertDoesNotThrow(() -> {
+      VelocityCompressor compressor = Natives.compress.get().create(12);
+      compressor.close();
+    });
   }
 
   @Test
@@ -75,6 +78,14 @@ class VelocityCompressorTest {
     VelocityCompressor compressor = JavaVelocityCompressor.FACTORY
         .create(Deflater.DEFAULT_COMPRESSION);
     check(compressor, () -> Unpooled.buffer(TEST_DATA.length + 32));
+  }
+
+  @Test
+  void javaHighCompressionLevelFallsBackSafely() {
+    assertDoesNotThrow(() -> {
+      VelocityCompressor compressor = JavaVelocityCompressor.FACTORY.create(12);
+      compressor.close();
+    });
   }
 
   private void check(VelocityCompressor compressor, Supplier<ByteBuf> bufSupplier)

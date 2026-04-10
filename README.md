@@ -1,42 +1,72 @@
-# Velocity
+# bVelocity
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/PaperMC/Velocity/gradle.yml)](https://papermc.io/downloads/velocity)
-[![Join our Discord](https://img.shields.io/discord/289587909051416579.svg?logo=discord&label=)](https://discord.gg/papermc)
+bVelocity is a customized Velocity fork focused on three things:
 
-A Minecraft server proxy with unparalleled server support, scalability,
-and flexibility.
+- more aggressive bandwidth compression defaults
+- a built-in `/bvelocity` command surface
+- localized operational output for the added features
 
-Velocity is licensed under the GPLv3 license.
+This fork is licensed under the GPLv3 license.
 
-## Goals
+## Highlights
 
-* A codebase that is easy to dive into and consistently follows best practices
-  for Java projects as much as reasonably possible.
-* High performance: handle thousands of players on one proxy.
-* A new, refreshing API built from the ground up to be flexible and powerful
-  whilst avoiding design mistakes and suboptimal designs from other proxies.
-* First-class support for Paper, Sponge, Fabric and Forge. (Other implementations
-  may work, but we make every endeavor to support these server implementations
-  specifically.)
+- `compression-threshold` defaults to `128`
+- `compression-level = -1` now means:
+  - native `libdeflate`: level `12`
+  - Java fallback: level `9`
+- built-in `/bvelocity` and `/bv` commands
+- outbound compression statistics and synthetic benchmark tooling
+- localized `bvelocity.command.*` message keys across all bundled locale files
   
 ## Building
 
-Velocity is built with [Gradle](https://gradle.org). We recommend using the
-wrapper script (`./gradlew`) as our CI builds using it.
+bVelocity is built with [Gradle](https://gradle.org). Use the wrapper:
 
-It is sufficient to run `./gradlew build` to run the full build cycle.
+```bash
+./gradlew build
+```
+
+If you only want the proxy jar:
+
+```bash
+./gradlew :velocity-proxy:shadowJar
+```
 
 ## Running
 
-Once you've built Velocity, you can copy and run the `-all` JAR from
-`proxy/build/libs`. Velocity will generate a default configuration file
-and you can configure it from there.
+The packaged proxy artifact is written to:
 
-Alternatively, you can get the proxy JAR from the [downloads](https://papermc.io/downloads/velocity)
-page.
+```text
+proxy/build/libs/bVelocity-1.0.0-SNAPSHOT.jar
+```
 
-# Localisation
+Run it with:
 
-Translations are handled using [Crowdin](https://papermc-io.crowdin.com/velocity).
-If you want to translate a language not available on Crowdin,
-you might want to ask in the [Discord](https://discord.gg/papermc) about it.
+```bash
+java -jar proxy/build/libs/bVelocity-1.0.0-SNAPSHOT.jar
+```
+
+The proxy generates `velocity.toml` on first start.
+
+## Commands
+
+The fork adds a built-in command namespace:
+
+- `/bvelocity`
+- `/bv`
+
+Current subcommands include:
+
+- `status`
+- `backend`
+- `config`
+- `compression`
+- `compression stats`
+- `compression reset`
+- `compression benchmark [bytes] [rounds]`
+
+## Localisation
+
+The `bvelocity.command.*` keys are included in all bundled locale files.
+English and Simplified Chinese have customized wording; the remaining locales
+currently ship with English fallback text for the new command group.

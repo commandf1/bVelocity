@@ -34,7 +34,7 @@ public final class MotdMigration implements ConfigurationMigration {
 
   @Override
   public void migrate(final CommentedFileConfig config, final Logger logger) {
-    final String oldMotd = config.getOrElse("motd", "<#09add3>A Velocity Server");
+    final String oldMotd = config.getOrElse("motd", "<#09add3>A bVelocity Server");
     final String migratedMotd;
     // JSON Format Migration
     if (oldMotd.strip().startsWith("{")) {

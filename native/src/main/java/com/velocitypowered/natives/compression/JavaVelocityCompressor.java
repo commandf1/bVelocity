@@ -40,7 +40,7 @@ public class JavaVelocityCompressor implements VelocityCompressor {
   private boolean disposed = false;
 
   private JavaVelocityCompressor(int level) {
-    this.deflater = new Deflater(level);
+    this.deflater = new Deflater(CompressionLevelUtil.forJava(level));
     this.inflater = new Inflater();
   }
 

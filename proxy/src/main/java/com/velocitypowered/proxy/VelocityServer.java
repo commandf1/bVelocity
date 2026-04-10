@@ -113,6 +113,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import top.notcoral.velocity.command.BVelocityCommand;
 
 /**
  * Implementation of {@link ProxyServer}.
@@ -202,13 +203,13 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
     String implVersion;
     String implVendor;
     if (pkg != null) {
-      implName = MoreObjects.firstNonNull(pkg.getImplementationTitle(), "Velocity");
+      implName = MoreObjects.firstNonNull(pkg.getImplementationTitle(), "bVelocity");
       implVersion = MoreObjects.firstNonNull(pkg.getImplementationVersion(), "<unknown>");
-      implVendor = MoreObjects.firstNonNull(pkg.getImplementationVendor(), "Velocity Contributors");
+      implVendor = MoreObjects.firstNonNull(pkg.getImplementationVendor(), "NotCoral");
     } else {
-      implName = "Velocity";
+      implName = "bVelocity";
       implVersion = "<unknown>";
-      implVendor = "Velocity Contributors";
+      implVendor = "NotCoral";
     }
 
     return new ProxyVersion(implName, implVendor, implVersion);
@@ -217,8 +218,8 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
   private VelocityPluginContainer createVirtualPlugin() {
     ProxyVersion version = getVersion();
     PluginDescription description = new VelocityPluginDescription(
-        "velocity", version.getName(), version.getVersion(), "The Velocity proxy",
-            version.getName().equals("Velocity") ? VELOCITY_URL : null,
+        "bvelocity", version.getName(), version.getVersion(), "The bVelocity proxy",
+            null,
             ImmutableList.of(version.getVendor()), Collections.emptyList(), null);
     VelocityPluginContainer container = new VelocityPluginContainer(description);
     container.setInstance(VelocityVirtualPlugin.INSTANCE);
@@ -268,6 +269,14 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
             .plugin(VelocityVirtualPlugin.INSTANCE)
             .build(),
         callbackCommand
+    );
+    final BrigadierCommand bvelocityCommand = BVelocityCommand.create(this);
+    commandManager.register(
+        commandManager.metaBuilder(bvelocityCommand)
+            .plugin(VelocityVirtualPlugin.INSTANCE)
+            .aliases("bv")
+            .build(),
+        bvelocityCommand
     );
     final BrigadierCommand serverCommand = ServerCommand.create(this);
     commandManager.register(
@@ -404,7 +413,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
       configuration = VelocityConfiguration.read(configPath);
 
       if (!configuration.validate()) {
-        logger.error("Your configuration is invalid. Velocity will not start up until the errors "
+        logger.error("Your configuration is invalid. bVelocity will not start up until the errors "
             + "are resolved.");
         LogManager.shutdown();
         System.exit(1);

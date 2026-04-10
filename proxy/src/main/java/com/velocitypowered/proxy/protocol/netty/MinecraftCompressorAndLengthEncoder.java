@@ -26,6 +26,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import java.util.zip.DataFormatException;
+import top.notcoral.velocity.compression.BVelocityCompressionStats;
 
 /**
  * Handler for compressing Minecraft packets.
@@ -42,14 +43,23 @@ public class MinecraftCompressorAndLengthEncoder extends MessageToByteEncoder<By
 
   @Override
   protected void encode(ChannelHandlerContext ctx, ByteBuf msg, ByteBuf out) throws Exception {
+    int initialWriterIndex = out.writerIndex();
     int uncompressed = msg.readableBytes();
     if (uncompressed < threshold) {
       // Under the threshold, there is nothing to do.
       ProtocolUtils.writeVarInt(out, uncompressed + 1);
       out.writeByte(0);
       out.writeBytes(msg);
+      BVelocityCompressionStats.INSTANCE.recordPassThrough(
+          uncompressed,
+          out.writerIndex() - initialWriterIndex
+      );
     } else {
       handleCompressed(ctx, msg, out);
+      BVelocityCompressionStats.INSTANCE.recordCompressed(
+          uncompressed,
+          out.writerIndex() - initialWriterIndex
+      );
     }
   }
 

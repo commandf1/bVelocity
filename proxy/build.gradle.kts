@@ -20,13 +20,21 @@ tasks {
 
     jar {
         manifest {
-            attributes["Implementation-Title"] = "Velocity"
-            attributes["Implementation-Vendor"] = "Velocity Contributors"
+            attributes["Implementation-Title"] = "bVelocity"
+            attributes["Implementation-Vendor"] = "NotCoral"
             attributes["Multi-Release"] = "true"
         }
     }
 
     shadowJar {
+        archiveBaseName.set("bVelocity")
+        archiveClassifier.set("")
+        manifest {
+            attributes["Implementation-Title"] = "bVelocity"
+            attributes["Implementation-Vendor"] = "NotCoral"
+            attributes["Multi-Release"] = "true"
+        }
+
         filesMatching("META-INF/org/apache/logging/log4j/core/config/plugins/**") {
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
@@ -116,7 +124,7 @@ tasks {
 
 val projectVersion = version as String
 fill {
-    project("velocity")
+    project("bvelocity")
 
     build {
         channel = BuildChannel.STABLE

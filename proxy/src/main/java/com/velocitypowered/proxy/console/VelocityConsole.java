@@ -110,7 +110,7 @@ public final class VelocityConsole extends SimpleTerminalConsole implements Cons
   @Override
   protected LineReader buildReader(LineReaderBuilder builder) {
     return super.buildReader(builder
-        .appName("Velocity")
+        .appName("bVelocity")
         .completer((reader, parsedLine, list) -> {
           try {
             List<String> offers = this.server.getCommandManager()

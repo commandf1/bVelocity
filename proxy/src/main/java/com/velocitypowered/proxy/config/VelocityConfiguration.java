@@ -214,7 +214,7 @@ public class VelocityConfiguration implements ProxyConfig {
       valid = false;
     }
 
-    if (advanced.compressionLevel < -1 || advanced.compressionLevel > 9) {
+    if (advanced.compressionLevel < -1 || advanced.compressionLevel > 12) {
       logger.error("Invalid compression level {}", advanced.compressionLevel);
       valid = false;
     } else if (advanced.compressionLevel == 0) {
@@ -792,7 +792,7 @@ public class VelocityConfiguration implements ProxyConfig {
 
     private Advanced(CommentedConfig config) {
       if (config != null) {
-        this.compressionThreshold = config.getIntOrElse("compression-threshold", 256);
+        this.compressionThreshold = config.getIntOrElse("compression-threshold", 128);
         this.compressionLevel = config.getIntOrElse("compression-level", -1);
         this.loginRatelimit = config.getIntOrElse("login-ratelimit", 3000);
         this.connectionTimeout = config.getIntOrElse("connection-timeout", 5000);
