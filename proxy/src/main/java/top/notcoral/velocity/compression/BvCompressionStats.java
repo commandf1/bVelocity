@@ -23,9 +23,9 @@ import java.util.concurrent.atomic.LongAdder;
 /**
  * Tracks aggregate proxy compression statistics.
  */
-public final class BVelocityCompressionStats {
+public final class BvCompressionStats {
 
-  public static final BVelocityCompressionStats INSTANCE = new BVelocityCompressionStats();
+  public static final BvCompressionStats INSTANCE = new BvCompressionStats();
 
   private final LongAdder totalPackets = new LongAdder();
   private final LongAdder compressedPackets = new LongAdder();
@@ -36,13 +36,25 @@ public final class BVelocityCompressionStats {
   private final LongAdder compressedEncodedBytes = new LongAdder();
   private final AtomicLong resetNanoTime = new AtomicLong(System.nanoTime());
 
-  private BVelocityCompressionStats() {
+  private BvCompressionStats() {
   }
 
+  /**
+   * Records a packet that went through the compression path.
+   *
+   * @param rawBytes the uncompressed payload size
+   * @param encodedBytes the encoded wire size
+   */
   public void recordCompressed(int rawBytes, int encodedBytes) {
     record(rawBytes, encodedBytes, true);
   }
 
+  /**
+   * Records a packet that bypassed compression.
+   *
+   * @param rawBytes the uncompressed payload size
+   * @param encodedBytes the encoded wire size
+   */
   public void recordPassThrough(int rawBytes, int encodedBytes) {
     record(rawBytes, encodedBytes, false);
   }
@@ -60,6 +72,9 @@ public final class BVelocityCompressionStats {
     }
   }
 
+  /**
+   * Clears all currently collected statistics.
+   */
   public void reset() {
     totalPackets.reset();
     compressedPackets.reset();
@@ -71,6 +86,11 @@ public final class BVelocityCompressionStats {
     resetNanoTime.set(System.nanoTime());
   }
 
+  /**
+   * Captures the current aggregate statistics in an immutable snapshot.
+   *
+   * @return the current snapshot
+   */
   public Snapshot snapshot() {
     return new Snapshot(
         resetNanoTime.get(),
@@ -84,6 +104,9 @@ public final class BVelocityCompressionStats {
     );
   }
 
+  /**
+   * Immutable compression statistics snapshot.
+   */
   public record Snapshot(
       long resetNanoTime,
       long totalPackets,
@@ -95,6 +118,11 @@ public final class BVelocityCompressionStats {
       long compressedEncodedBytes
   ) {
 
+    /**
+     * Returns the number of elapsed seconds since the last reset.
+     *
+     * @return the elapsed seconds for this snapshot window
+     */
     public long elapsedSeconds() {
       return (System.nanoTime() - resetNanoTime) / 1_000_000_000L;
     }

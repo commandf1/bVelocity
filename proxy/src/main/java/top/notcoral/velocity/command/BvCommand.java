@@ -45,12 +45,12 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.translation.Argument;
-import top.notcoral.velocity.compression.BVelocityCompressionStats;
+import top.notcoral.velocity.compression.BvCompressionStats;
 
 /**
  * Implements the {@code /bvelocity} command and aliases.
  */
-public final class BVelocityCommand {
+public final class BvCommand {
 
   private static final String ROOT_COMMAND = "/bvelocity";
   private static final String SIZE_ARG = "bytes";
@@ -62,9 +62,15 @@ public final class BVelocityCommand {
   private static final int DEFAULT_BENCHMARK_BYTES = 32768;
   private static final int DEFAULT_BENCHMARK_ROUNDS = 64;
 
-  private BVelocityCommand() {
+  private BvCommand() {
   }
 
+  /**
+   * Creates the root Brigadier command for bVelocity.
+   *
+   * @param server the proxy server instance
+   * @return the command tree root
+   */
   public static BrigadierCommand create(final VelocityServer server) {
     final LiteralCommandNode<CommandSource> backend = BrigadierCommand
         .literalArgumentBuilder("backend")
@@ -252,8 +258,8 @@ public final class BVelocityCommand {
     @Override
     public int run(CommandContext<CommandSource> context) {
       final CommandSource source = context.getSource();
-      final BVelocityCompressionStats.Snapshot snapshot =
-          BVelocityCompressionStats.INSTANCE.snapshot();
+      final BvCompressionStats.Snapshot snapshot =
+          BvCompressionStats.INSTANCE.snapshot();
 
       sendSectionTitle(source, "bvelocity.command.compression-title");
       sendStatLine(source, Component.translatable(
@@ -389,7 +395,7 @@ public final class BVelocityCommand {
 
     @Override
     public int run(CommandContext<CommandSource> context) {
-      BVelocityCompressionStats.INSTANCE.reset();
+      BvCompressionStats.INSTANCE.reset();
       context.getSource().sendMessage(Component.translatable(
           "bvelocity.command.compression-reset",
           NamedTextColor.GREEN

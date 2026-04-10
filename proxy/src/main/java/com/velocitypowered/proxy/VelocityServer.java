@@ -113,7 +113,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import top.notcoral.velocity.command.BVelocityCommand;
+import top.notcoral.velocity.command.BvCommand;
 
 /**
  * Implementation of {@link ProxyServer}.
@@ -270,7 +270,7 @@ public class VelocityServer implements ProxyServer, ForwardingAudience {
             .build(),
         callbackCommand
     );
-    final BrigadierCommand bvelocityCommand = BVelocityCommand.create(this);
+    final BrigadierCommand bvelocityCommand = BvCommand.create(this);
     commandManager.register(
         commandManager.metaBuilder(bvelocityCommand)
             .plugin(VelocityVirtualPlugin.INSTANCE)
