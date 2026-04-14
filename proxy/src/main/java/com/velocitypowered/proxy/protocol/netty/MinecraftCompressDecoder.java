@@ -97,6 +97,8 @@ public class MinecraftCompressDecoder extends MessageToMessageDecoder<ByteBuf> {
     ByteBuf uncompressed = preferredBuffer(ctx.alloc(), compressor, claimedUncompressedSize);
     try {
       compressor.inflate(compatibleIn, uncompressed, claimedUncompressedSize);
+      checkFrame(uncompressed.writerIndex() == claimedUncompressedSize,
+              "Decompressed size %s does not match claimed uncompressed size %s", uncompressed.writerIndex(), claimedUncompressedSize);
       out.add(uncompressed);
     } catch (Exception e) {
       uncompressed.release();
